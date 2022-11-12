@@ -1,4 +1,9 @@
 import {
+  useState
+}
+from 'react'
+import getScores from '../utils';
+import {
   Card,
   Row,
   Col,
@@ -13,6 +18,25 @@ import {
 } from 'reactstrap';
 
 const Forms = () => {
+  const [data, setData] = useState(null);
+  const [name, setName] = useState(null);
+
+
+const inputArray = {
+  MakeWeight : "",
+  MakeText : "",
+  ModelWeight : "",
+  ModelText : "",
+  YearWeight : "",
+  YearText : "",
+  PriceWeight : "",
+  PriceText : "",
+  MileageWeight : "",
+  MileageText : "",
+  ColorWeight : "",
+  ColorText : "",
+};
+
   return (
     <Row>
       <Col>
@@ -26,77 +50,93 @@ const Forms = () => {
           </CardTitle>
           <CardBody>
             <Form>
-              <FormGroup>
-                <Label for="exampleEmail">Email</Label>
-                <Input
-                  id="exampleEmail"
-                  name="email"
-                  placeholder="with a placeholder"
-                  type="email"
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="examplePassword">Password</Label>
-                <Input
-                  id="examplePassword"
-                  name="password"
-                  placeholder="password placeholder"
-                  type="password"
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="exampleSelect">Select</Label>
-                <Input id="exampleSelect" name="select" type="select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+            <FormGroup>
+                <Label for="MakeWeight">MakeWeight</Label>
+                <Input id="MakeWeight" name="select" type="select" onChange={e => inputArray.MakeWeight = (e.target.value)}>
+                  <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
                 </Input>
               </FormGroup>
               <FormGroup>
-                <Label for="exampleSelectMulti">Select Multiple</Label>
-                <Input id="exampleSelectMulti" multiple name="selectMulti" type="select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+                <Label for="MakeText">MakeText</Label>
+                <Input id="MakeText" name="text" type="textarea" onChange={e => inputArray.MakeText = (e.target.value)}/>
+              </FormGroup>
+              <FormGroup>
+                <Label for="ModelWeight">ModelWeight</Label>
+                <Input id="ModelWeight" name="select" type="select" onChange={e => inputArray.ModelWeight = (e.target.value)}>
+                <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
                 </Input>
               </FormGroup>
               <FormGroup>
-                <Label for="exampleText">Text Area</Label>
-                <Input id="exampleText" name="text" type="textarea" />
+                <Label for="ModelText">ModelText</Label>
+                <Input id="ModelText" name="text" type="textarea"  onChange={e => inputArray.ModelText = (e.target.value)}/>
               </FormGroup>
               <FormGroup>
-                <Label for="exampleFile">File</Label>
-                <Input id="exampleFile" name="file" type="file" />
-                <FormText>
-                  This is some placeholder block-level help text for the above input. Its a bit
-                  lighter and easily wraps to a new line.
-                </FormText>
+                <Label for="MileageWeight">MileageWeight</Label>
+                <Input id="MileageWeight" name="select" type="select" onChange={e => inputArray.MileageWeight = (e.target.value)}>
+                <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
+                </Input>
               </FormGroup>
-              <FormGroup tag="fieldset">
-                <legend>Radio Buttons</legend>
-                <FormGroup check>
-                  <Input name="radio1" type="radio" />{' '}
-                  <Label check>Option one is this and that—be sure to include why its great</Label>
-                </FormGroup>
-                <FormGroup check>
-                  <Input name="radio1" type="radio" />{' '}
-                  <Label check>
-                    Option two can be something else and selecting it will deselect option one
-                  </Label>
-                </FormGroup>
-                <FormGroup check disabled>
-                  <Input disabled name="radio1" type="radio" />{' '}
-                  <Label check>Option three is disabled</Label>
-                </FormGroup>
+              <FormGroup>
+                <Label for="MileageText">MileageText</Label>
+                <Input id="MileageText" name="text" type="textarea"  onChange={e => inputArray.MileageText = (e.target.value)}/>
               </FormGroup>
-              <FormGroup check>
-                <Input type="checkbox" /> <Label check>Check me out</Label>
+              <FormGroup>
+                <Label for="YearWeight">YearWeight</Label>
+                <Input id="YearWeight" name="select" type="select" onChange={e => inputArray.YearWeight = (e.target.value)}>
+                <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
+                </Input>
               </FormGroup>
-              <Button>Submit</Button>
+              <FormGroup>
+                <Label for="YearText">YearText</Label>
+                <Input id="YearText" name="text" type="textarea"  onChange={e => inputArray.YearText = (e.target.value)}/>
+              </FormGroup>
+              <FormGroup>
+                <Label for="PriceWeight">PriceWeight</Label>
+                <Input id="PriceWeight" multiple name="selectMulti" type="select" onChange={e => inputArray.PriceWeight = (e.target.value)}>
+                <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="PriceText">PriceText</Label>
+                <Input id="PriceText" name="text" type="textarea"  onChange={e => inputArray.PriceText = (e.target.value)}/>
+              </FormGroup>
+              <FormGroup>
+                <Label for="ColorWeight">ColorWeight</Label>
+                <Input id="ColorWeight" name="select" type="select" onChange={e => inputArray.ColorWeight = (e.target.value)}>
+                <option value='1'>1</option>
+                  <option value='2'>2</option>
+                  <option value='3'>3</option>
+                  <option value='4'>4</option>
+                  <option value='5'>5</option>
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="ColorText">ColorText</Label>
+                <Input id="ColorText" name="text" type="textarea"  onChange={e => inputArray.ColorText = (e.target.value)}/>
+              </FormGroup>
+              <Button 
+              onClick={ getScores(inputArray)}
+              >Submit</Button>
             </Form>
           </CardBody>
         </Card>
