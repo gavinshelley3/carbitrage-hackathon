@@ -75,7 +75,7 @@ const ProjectTables = ({carData}) => {
               </tr>
             </thead>
             <tbody>
-              {carData.map((cdata, index) => (
+              {carData && carData.map((cdata, index) => (
                 <>
                 {cdata && 
                   <tr key={index} className="border-top">
