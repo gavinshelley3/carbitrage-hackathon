@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 // import getScores from '../ui/utils';
 import { collection, getDocs } from "firebase/firestore";
 import db from "../../firebase/config";
+import emailjs from '@emailjs/browser';
 
 
 import {
@@ -24,6 +25,18 @@ const Forms = () => {
   const [data, setData] = useState(null);
   const [name, setName] = useState(null);
   // const getScores(inputArray);
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs.sendForm('default_service', 'template_9u1c8xp', form.current, 'jjnfbJCzvk3o7ev0W')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+  };
 
   const [inputArray, setInputArray] = useState({
     MakeWeight : 3,
@@ -98,7 +111,23 @@ const Forms = () => {
 
 
   return (
+    
     <Row>
+      <Card style={{padding: 10}}>
+        <h5>Enter Profile Information</h5>
+        <form ref={form} onSubmit={sendEmail}>
+        <FormGroup>
+          <Label for="user_name">Name</Label>
+          <Input id="user_name" name="user_name" type="text"/>
+        </FormGroup>
+        <FormGroup>
+          <Label for="email">Email</Label>
+          <Input id="email" name="user_email" type="text"/>
+        </FormGroup>
+        <textarea name="message" hidden value="Here are your top cars for the week"/>
+        <input type="submit" value="Send" className='btn btn-secondary' />
+        </form>
+      </Card>
       <Col>
         {/* --------------------------------------------------------------------------------*/}
         {/* Card-1*/}
