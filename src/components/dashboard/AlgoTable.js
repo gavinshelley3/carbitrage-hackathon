@@ -17,7 +17,7 @@ const AlgoTables = ({carData}) => {
 
                 <th>Mileage</th>
                 <th>Price</th>
-                <th>Value</th>
+                <th>Score</th>
               </tr>
             </thead>
             <tbody>
