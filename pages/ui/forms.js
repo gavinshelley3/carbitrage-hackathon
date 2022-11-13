@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 // import getScores from '../ui/utils';
 import { collection, getDocs } from "firebase/firestore";
 import db from "../../firebase/config";
+import AlgoTables from '../../src/components/dashboard/AlgoTable';
 import emailjs from '@emailjs/browser';
 
 
@@ -18,12 +19,14 @@ import {
   Input,
   FormText,
 } from 'reactstrap';
+var carScores = [];
 
 
 
 const Forms = () => {
   const [data, setData] = useState(null);
   const [name, setName] = useState(null);
+  const [showTable, setShowTable] = useState(false);
   // const getScores(inputArray);
   const form = useRef();
 
@@ -52,18 +55,20 @@ const Forms = () => {
     ColorWeight : 3,
     ColorText : "",
   });
+  
+
 
   async function getScores() {
+    setShowTable(false);
 
     const carsCollection = collection(db, "cars");
     const carsSnapshot = await getDocs(carsCollection);
   
-    const carsList = carsSnapshot.docs.map((doc) => doc.data());
+    var carsList = carsSnapshot.docs.map((doc) => doc.data());
   
-    const carScores = [];
+// carScores.length = 0;
 
-
-
+carScores = [];
     carsList.forEach((item) => {
       const scores = {
         MakeScore : 0,
@@ -76,19 +81,28 @@ const Forms = () => {
 
       // console.log(inputArray)
       
-      {item.make && item.make.toLowerCase() === inputArray.MakeText.toLowerCase() ? scores.MakeScore = 0 : scores.MakeScore = 5}
-      {item.model && item.model.toLowerCase() === inputArray.ModelText.toLowerCase() ? scores.ModelScore = 0 : scores.ModelScore = 10}
-      {item.paint && item.paint[0].toLowerCase() === inputArray.ColorText.toLowerCase() ? scores.ColorScore = 0 : scores.ColorScore = 1}
+      {item.make && item.make.toLowerCase() === inputArray.MakeText.toLowerCase() 
+        ? scores.MakeScore = (0 * inputArray.MakeWeight) : scores.MakeScore = (3 * inputArray.MakeWeight)}
+      {item.model && item.model.toLowerCase() === inputArray.ModelText.toLowerCase() 
+        ? scores.ModelScore = (0 * inputArray.ModelWeight) : scores.ModelScore = (5 * inputArray.ModelWeight)}
+      {item.paint && item.paint[0].toLowerCase() === inputArray.ColorText.toLowerCase() 
+        ? scores.ColorScore = (0 * inputArray.ColorWeight) : scores.ColorScore = (1 * inputArray.ColorWeight)}
+      item.MakeScore = scores.MakeScore;
+      item.ModelScore = scores.ModelScore;
+      item.YearScore = scores.YearScore;
   
         
         const yearDiff = (item.makeYear - inputArray.YearText);
         scores.YearScore = yearDiff * inputArray.YearWeight * 2;
+        item.YearScore = scores.YearScore;
   
         const priceDiff = (item.price - inputArray.PriceText);
-        scores.PriceScore = priceDiff/inputArray.PriceText * inputArray.PriceWeight * 10;
+        scores.PriceScore = priceDiff/inputArray.PriceText * inputArray.PriceWeight * 5;
+        item.PriceScore = scores.PriceScore;
   
         const mileageDiff = (item.mileage - inputArray.MileageText);
-        scores.MileageScore = mileageDiff/inputArray.MileageText * inputArray.MileageWeight * 5;
+        scores.MileageScore = mileageDiff/inputArray.MileageText * inputArray.MileageWeight * 2.5;
+        item.MileageScore = scores.MileageScore;
   
         const totalScore = scores.MakeScore + scores.ModelScore + scores.YearScore + scores.PriceScore + scores.MileageScore + scores.ColorScore;
   
@@ -101,9 +115,12 @@ const Forms = () => {
         
         item.score = itemScore;      
         carScores.push(item);
+        console.log(item.score);
     });
     carScores.sort((a,b) => b.score - a.score)
     console.log(carScores);
+    setShowTable(true);
+    carsList  = [];
     // return carScores;
     };
 
@@ -111,7 +128,7 @@ const Forms = () => {
 
 
   return (
-    
+    <>
     <Row>
       <Card style={{padding: 10}}>
         <h5>Enter Profile Information</h5>
@@ -231,6 +248,9 @@ const Forms = () => {
         </Card>
       </Col>
     </Row>
+    {showTable && <AlgoTables carData = {carScores}/>}
+
+    </>
   );
 };
 
