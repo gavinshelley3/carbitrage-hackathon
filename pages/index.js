@@ -14,7 +14,8 @@ import bg4 from "../src/assets/images/bg/bg4.jpg";
 
 import { collection, getDocs } from "firebase/firestore";
 import db from "../firebase/config";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import emailjs from '@emailjs/browser';
 
 const BlogData = [
   {
@@ -78,6 +79,36 @@ const FirebaseDataFetchingDemo = () => {
 export default function Home() {
   const [data, setData] = useState(null);
   const [recentCars, setRecentCars] = useState(null);
+  const [email, setEmail] = useState('')
+  
+  // const SendMail = async (e) => {
+  //   e.preventDefault();
+  //   console.log('call')
+  //   axios.post('http://localhost:3000/api/email',{email})
+  //  .then(
+    
+  //  (res)=>{
+  //    alert('Send Mail To You')
+  //    setEmail('')
+ 
+  //  }
+ 
+  //  ).catch(
+  //    (e)=>console.log(e)
+  //  )
+  // }
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs.sendForm('default_service', 'template_9u1c8xp', form.current, 'jjnfbJCzvk3o7ev0W')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+  };
 
   const handleFetchData = async () => {
     // use firebase to get data from the cars collection
@@ -111,6 +142,21 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <FirebaseDataFetchingDemo />
+      <form ref={form} onSubmit={sendEmail}>
+      <label>Name</label>
+      <input type="text" name="user_name" />
+      <label>Email</label>
+      <input type="email" name="user_email" />
+      <label>Message</label>
+      <textarea name="message" />
+      <input type="submit" value="Send" />
+      </form>
+      {/* <main className={styles.main}>
+       <form>
+      <input type="email" placeholder="Enter Mail" required value={email} onChange={(e)=>setEmail(e.target.value)}></input>
+      <button onClick={SendMail}>Send</button>
+        </form>
+     </main> */}
       {/***Blog Cards***/}
       <h5 className="mb-3 mt-3">Recently Added</h5>
         <Row>

@@ -1,67 +1,42 @@
 import Image from "next/image";
 import { Card, CardBody, CardTitle, CardSubtitle, Table } from "reactstrap";
-import user1 from "../../assets/images/users/user1.jpg";
-import user2 from "../../assets/images/users/user2.jpg";
-import user3 from "../../assets/images/users/user3.jpg";
-import user4 from "../../assets/images/users/user4.jpg";
-import user5 from "../../assets/images/users/user5.jpg";
 
-const tableData = [
-  {
-    avatar: user1,
-    name: "Jonathan Gover",
-    email: "hgover@gmail.com",
-    project: "Flexy React",
-    status: "pending",
-    weeks: "35",
-    budget: "95K",
-  },
-  {
-    avatar: user2,
-    name: "Martin Gover",
-    email: "hgover@gmail.com",
-    project: "Lading pro React",
-    status: "done",
-    weeks: "35",
-    budget: "95K",
-  },
-  {
-    avatar: user3,
-    name: "Gulshan Gover",
-    email: "hgover@gmail.com",
-    project: "Elite React",
-    status: "holt",
-    weeks: "35",
-    budget: "95K",
-  },
-  {
-    avatar: user4,
-    name: "Pavar Gover",
-    email: "hgover@gmail.com",
-    project: "Flexy React",
-    status: "pending",
-    weeks: "35",
-    budget: "95K",
-  },
-  {
-    avatar: user5,
-    name: "Hanna Gover",
-    email: "hgover@gmail.com",
-    project: "Ample React",
-    status: "done",
-    weeks: "35",
-    budget: "95K",
-  },
-];
+const getValueDiff = (price) => {
+  var value = 0 
+  if (price <= 3999){
+    value = Math.floor(Math.random() * 6000);
+  } else if (price > 3999 && price <= 9999){
+    value = Math.floor(Math.random() * (15000 - 3999)) + 3999;
+  } else if (price > 9999 && price <= 19999){
+    value = Math.floor(Math.random() * (30000 - 9999)) + 9999;
+  } else if (price > 19999 && price <= 29999){
+    value = Math.floor(Math.random() * (45000 - 19999)) + 19999;
+  } else {
+    value = Math.floor(Math.random() * (65000 - 29999)) + 29999;
+  }
+  var difference = Math.abs(price - value);
+  console.log(value)
+  var color = "text-secondary"
+  var sign = "$"
+  if (price > value){
+    color = "text-danger"
+    sign = "+ $"
+  } else if (price < value){
+    color = "text-success"
+    sign = "- $"
+  }
+  return (
+    <>
+      <p className={color}>{`${sign}${difference}`}</p>
+    </>
+  )
+}
 
 const ProjectTables = ({carData}) => {
   return (
     <Card>
       <CardBody>
         <CardTitle tag="h5">Available Vehicles</CardTitle>
-        {/* <CardSubtitle className="mb-2 text-muted" tag="h6">
-          Overview of the projects
-        </CardSubtitle> */}
         <div className="table-responsive">
           <Table className="text-nowrap mt-3 align-middle" borderless>
             <thead>
@@ -77,7 +52,7 @@ const ProjectTables = ({carData}) => {
             <tbody>
               {carData && carData.map((cdata, index) => (
                 <>
-                {cdata && 
+                {cdata?.make && 
                   <tr key={index} className="border-top">
                     <td>
                       <div className="d-flex align-items-center p-2">
@@ -101,15 +76,8 @@ const ProjectTables = ({carData}) => {
                     <td>{cdata.city}, {cdata.state}</td>
                     <td>{cdata.mileage}</td>
                     <td>{cdata.price}</td>
-                    {/* use this section to show comparative value */}
                     <td>
-                      {cdata.price - 20000 > 0 ? (
-                        <span className="p-2 bg-danger rounded-circle d-inline-block ms-3" />
-                      ) : cdata.price - 20000 === 0 ? (
-                        <span className="p-2 bg-warning rounded-circle d-inline-block ms-3" />
-                      ) : (
-                        <span className="p-2 bg-success rounded-circle d-inline-block ms-3" />
-                      )}
+                      {getValueDiff(cdata.price)}
                     </td>
                     
                   </tr>
